@@ -12,6 +12,9 @@ class Motorista(Base):
     matricula_funcionario = Column(Integer, nullable=False)
     status = Column(String(100), nullable=False) 
 
+    #Relacionamento
+    motorista = relationship("Motorista", back_populates="viagens")
+
     #Função de imprimir
     def __repr__(self):
         return f"Motorista ID = {self.id} - Nome =  {self.nome} - Matricula do motorista {self.matricula_funcionario} - status = {self.status}"
@@ -23,6 +26,12 @@ class Viagem(Base):
     destino_principal = Column(String(100), nullable=False)
     data_inicio = Column(Date, nullable=False)
     data_fim = Column(Date, nullable=False)
+
+    #ForeingKey
+    motorista_id = Column(Integer, ForeignKey("motoristas.id"))
+
+    #Relacionamento
+    motorista = relationship("Motorista", back_populates="viagens")
 
     def _repr__(self):
         return f"viagens ID = {self.id} - Destino = {self.destino_principal} - Ida = {self.data_inicio} - Volta = {self.data_fim}"
