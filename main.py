@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine, Column, Integer, String, Date, ForeignKey
 from sqlalchemy.orm import declarative_base , sessionmaker, relationship
+import datetime
 
 Base = declarative_base()
 
@@ -48,9 +49,9 @@ def cadastrar_motorista():
 
     with Session() as session:
         try:
-            motorista = Motorista(nome = nome_motorista)
+            motoristas = Motorista(nome = nome_motorista, matricula_funcionario = matricula, status = status)
             
-            session.add(motorista)
+            session.add(motoristas)
             session.commit()
             print("Motorista cadastrado com sucesso!")
 
@@ -58,30 +59,24 @@ def cadastrar_motorista():
             session.rollback()
             print(f"Ocorreu um erro {erro}")
 
-cadastrar_motorista()
-
-
-
-
-
-
-
-
-
-
-
-
 def cadastrar_viagens():
     destino = input("Digite o nome da viagem: ").capitalize()
     destino_inicio = input("Digite a data do inicio da viagem: ")
     destino_fim = input("Digite a data de volta: ")
+
     with Session() as session:
         try:
-            viagem = Viagem(destino_principal = destino,data_inicio = destino_inicio, data_fim = destino_fim)
+            #Conversão: de texto para data real
+            inicio_dt = datetime.datetime.strptime(destino_inicio, "%d%m%Y").date()
+            fim_dt = datetime.datetime.strptime(destino_fim, "%d%m%Y").date()
+
+            viagem = Viagem(destino_principal = destino, data_inicio = inicio_dt, data_fim = fim_dt)
             session.add(viagem)
             session.commit()
             print("Funcionario cadastrado com sucesso!")
+
         except Exception as erro:
             session.rollback()
             print(f"Ocorreu um erro {erro}")
 
+cadastrar_viagens()
