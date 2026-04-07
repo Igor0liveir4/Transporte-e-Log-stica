@@ -79,4 +79,16 @@ def cadastrar_viagens():
             session.rollback()
             print(f"Ocorreu um erro {erro}")
 
-cadastrar_viagens()
+def listar_motoristas():
+    with Session() as session:
+        try:
+            motoristas = session.query(Motorista).all()
+            for m in motoristas:
+                print(f"\n{m}")
+                for mo in m.mos:
+                    print(mo)
+
+        except Exception as erro:
+            session.rollback()
+            print(f"Ocorreu um erro {erro}")
+listar_motoristas()
